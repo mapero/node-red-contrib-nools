@@ -1,0 +1,62 @@
+<script type="text/javascript">
+  RED.nodes.registerType("nools-flow", {
+    category: "config",
+    defaults: {
+      name: {value:"", required: true},
+      flow: {value:"", required: true}
+    },
+    label: function() {
+      return this.name;
+    },
+    oneditprepare: function() {
+      var that = this;
+      this.editor = RED.editor.createEditor({
+        id: "node-config-input-flow-editor",
+        mode: "ace/mode/html",
+        value: $("#node-config-input-flow").val()
+      });
+      this.editor.on("change", function() {
+        //Update the hidden item when editor content changed
+        $("#node-config-input-flow").val(that.editor.getValue());
+      });
+      this.editor.focus();
+    }
+  });
+</script>
+
+<script type="text/x-red" data-template-name="nools-flow">
+    <div class="form-row">
+        <label for="node-config-input-name"><i class="icon-bookmark"></i>Name</label>
+        <input type="text" id="node-config-input-name" />
+    </div>
+    <div class="form-row node-text-editor-row">
+      <input type="hidden" id="node-config-input-flow" autofocus="autofocus">
+      <div style="height: 250px;" class="node-text-editor" id="node-config-input-flow-editor" ></div>
+    </div>
+</script>
+
+<script type="text/javascript">
+  RED.nodes.registerType("nools-session", {
+    category: "rules",
+    defaults: {
+      name: {value:"", required: true},
+      flow: {value:"", type:"nools-flow", required: true}
+    },
+    inputs:1,
+    outputs:1,
+    label: function() {
+      return this.name;
+    }
+  });
+</script>
+
+<script type="text/x-red" data-template-name="nools-session">
+    <div class="form-row">
+        <label for="node-input-name"><i class="icon-bookmark"></i>Name</label>
+        <input type="text" id="node-input-name">
+    </div>
+    <div class="form-row">
+        <label for="node-input-flow"><i class="icon-bookmark"></i>Flow</label>
+        <input type="text" id="node-input-flow">
+    </div>
+</script>
