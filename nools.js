@@ -72,6 +72,9 @@ module.exports = function(RED) {
 		node.session = node.flow.getSession();
 		node.messages = {};
 
+		//Run once for init
+		node.session.match();
+
 		node.on("close", function() {
 			nools.deleteFlow(n.name);
 		});
