@@ -20,25 +20,24 @@ var Message = function(packet) {
 	this.lastChange = undefined;
 };
 
-var Node = function(node) {
-	this.node = node;
-
-	this.fire = function(payload) {
-		this.node.send({topic: this.node.topic, payload: payload});
-	}
-}
-
 module.exports = function(RED) {
 
 	function NoolsFlowNode(n) {
 		RED.nodes.createNode(this,n);
 		var node = this;
 
+		node.topic = n.topic;
+
+		node.publish = function(payload, topic) {
+			var t = topic ? topic : node.topic;
+			node.send({topic: t, payload: payload});
+		}
+
 		node.flow = nools.compile(n.flow, {
 			name: n.name,
 			define: {
 				Message: Message,
-				Node: Node
+				publish: node.publish
 			}
 		});
 
