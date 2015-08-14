@@ -20,6 +20,15 @@ var Message = function(packet) {
 	this.lastChange = undefined;
 };
 
+var Node = function(node) {
+	this.topic = topic;
+	this.node = node;
+
+	this.fire = function(payload) {
+		this.node.send({topic: this.node.topic, payload: payload});
+	}
+}
+
 module.exports = function(RED) {
 
 	function NoolsFlowNode(n) {
@@ -30,7 +39,7 @@ module.exports = function(RED) {
 			name: n.name,
 			define: {
 				Message: Message,
-				Node: NoolsSessionNode
+				Node: Node
 			}
 		});
 
@@ -46,8 +55,9 @@ module.exports = function(RED) {
 		var node = this;
 		node.flow = RED.nodes.getNode(n.flow).flow;
 		node.session = node.flow.getSession();
+		node.topic = n.topic;
 
-		node.session.assert(this);
+		node.session.assert(new Node(node));
 		node.messages = {};
 
 		node.session.on("fire", function(name, rule) {
