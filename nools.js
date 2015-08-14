@@ -21,7 +21,6 @@ var Message = function(packet) {
 };
 
 var Node = function(node) {
-	this.topic = topic;
 	this.node = node;
 
 	this.fire = function(payload) {
