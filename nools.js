@@ -42,22 +42,12 @@ module.exports = function(RED) {
 			}
 		});
 
+		node.session = node.flow.getSession();
+		node.messages = {};
+
 		node.on("close", function() {
 			nools.deleteFlow(n.name);
 		});
-	};
-
-	RED.nodes.registerType("nools-flow", NoolsFlowNode);
-
-	function NoolsSessionNode(n) {
-		RED.nodes.createNode(this,n);
-		var node = this;
-		node.flow = RED.nodes.getNode(n.flow).flow;
-		node.session = node.flow.getSession();
-		node.topic = n.topic;
-
-		node.session.assert(new Node(node));
-		node.messages = {};
 
 		node.session.on("fire", function(name, rule) {
 			node.log("Rule fired: "+name);
@@ -83,6 +73,8 @@ module.exports = function(RED) {
 			}
 			node.session.match();
 		});
+
 	};
-	RED.nodes.registerType("nools-session", NoolsSessionNode);
+
+	RED.nodes.registerType("nools-flow", NoolsFlowNode);
 }

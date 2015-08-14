@@ -1,10 +1,14 @@
 <script type="text/javascript">
   RED.nodes.registerType("nools-flow", {
-    category: "config",
+    category: "rules",
+    color: "#83B3B3",
     defaults: {
       name: {value:"", required: true},
-      flow: {value:"", required: true}
+      topic: {value:"", required: false},
+      flow: {value:"", required: true},
     },
+    inputs:1,
+    outputs:1,
     label: function() {
       return this.name;
     },
@@ -32,37 +36,5 @@
     <div class="form-row node-text-editor-row">
       <input type="hidden" id="node-config-input-flow" autofocus="autofocus">
       <div style="height: 250px;" class="node-text-editor" id="node-config-input-flow-editor" ></div>
-    </div>
-</script>
-
-<script type="text/javascript">
-  RED.nodes.registerType("nools-session", {
-    category: "rules",
-    color: "#83B3B3",
-    defaults: {
-      name: {value:"", required: true},
-      topic: {value:"", required: true},
-      flow: {value:"", type:"nools-flow", required: true}
-    },
-    inputs:1,
-    outputs:1,
-    label: function() {
-      return this.name;
-    }
-  });
-</script>
-
-<script type="text/x-red" data-template-name="nools-session">
-    <div class="form-row">
-        <label for="node-input-name"><i class="icon-bookmark"></i>Name</label>
-        <input type="text" id="node-input-name">
-    </div>
-    <div class="form-row">
-        <label for="node-input-topic"><i class="icon-bookmark"></i>Topic</label>
-        <input type="text" id="node-input-topic">
-    </div>
-    <div class="form-row">
-        <label for="node-input-flow"><i class="icon-bookmark"></i>Flow</label>
-        <input type="text" id="node-input-flow">
     </div>
 </script>
