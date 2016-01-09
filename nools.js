@@ -48,16 +48,65 @@ var Clock = function(){
 
 module.exports = function(RED) {
 
+	function NoolsAssert(n) {
+		RED.nodes.createNode(this,n);
+		var node = this;
+
+		node.session = RED.nodes.getNode(n.session).session;
+		node.messages = RED.nodes.getNode(n.session).messages;
+
+		node.on("input", function(msg) {
+
+			if(!msg.topic) {
+				node.warn("Topic must be defined!");
+				return;
+			}
+
+			if(msg.topic in node.messages) {
+				var m = node.messages[msg.topic];
+				if(msg.payload) {
+					m.updatePayload(msg);
+					node.session.modify(m);
+				} else {
+					node.session.retract(m);
+				}
+
+			} else {
+				if(!msg.payload) {
+					return;
+				}
+				var m = new Message(msg);
+				node.messages[msg.topic] = m;
+				node.session.assert(m);
+			}
+			node.session.match();
+		});
+	};
+	RED.nodes.registerType("nools-assert", NoolsAssert);
+
+	function NoolsFire(n) {
+		RED.nodes.createNode(this,n);
+		var node = this;
+
+		node.topic = n.topic;
+		node.session = RED.nodes.getNode(n.session).session;
+		node.messages = RED.nodes.getNode(n.session).messages;
+
+		node.session.on("fire", function(name, rule) {
+			node.send({
+				"payload": "test",
+				"topic": node.topic,
+				"facts": node.session.getFacts()
+			});
+		});
+	}
+	RED.nodes.registerType("nools-fire", NoolsFire);
+
 	function NoolsFlowNode(n) {
 		RED.nodes.createNode(this,n);
 		var node = this;
 
 		node.topic = n.topic;
-
-		node.publish = function(payload, topic) {
-			var t = topic ? topic : node.topic;
-			node.send({topic: t, payload: payload});
-		}
 
 		node.flow = nools.compile(n.flow, {
 			name: n.name,
@@ -79,32 +128,6 @@ module.exports = function(RED) {
 			nools.deleteFlow(n.name);
 		});
 
-		node.session.on("fire", function(name, rule) {
-			node.log("Rule fired: "+name);
-		});
-
-		node.on("input", function(msg) {
-			if(msg.topic in node.messages) {
-				var m = node.messages[msg.topic];
-				if(msg.payload) {
-					m.updatePayload(msg);
-					node.session.modify(m);
-				} else {
-					node.session.retract(m);
-				}
-
-			} else {
-				if(!msg.payload) {
-					return;
-				}
-				var m = new Message(msg);
-				node.messages[msg.topic] = m;
-				node.session.assert(m);
-			}
-			node.session.match();
-		});
-
 	};
-
 	RED.nodes.registerType("nools-flow", NoolsFlowNode);
 }
