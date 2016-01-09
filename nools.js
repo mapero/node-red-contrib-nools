@@ -94,9 +94,8 @@ module.exports = function(RED) {
 
 		node.session.on("fire", function(name, rule) {
 			node.send({
-				"payload": "test",
-				"topic": node.topic,
-				"facts": node.session.getFacts()
+				"payload": node.session.getFacts(),
+				"topic": node.topic
 			});
 		});
 	}

@@ -1,6 +1,6 @@
 {
 "name" : "node-red-contrib-nools",
-"version" : "0.0.2",
+"version" : "0.0.3",
 "description" : "Node red nodes to integrate rules into your flow",
 "dependencies": {
 	"nools": "0.4.1"
