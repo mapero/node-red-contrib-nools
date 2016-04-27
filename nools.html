@@ -13,7 +13,7 @@
       var that = this;
       this.editor = RED.editor.createEditor({
         id: "node-config-input-flow-editor",
-        mode: "ace/mode/html",
+        mode: "ace/mode/text",
         value: $("#node-config-input-flow").val()
       });
       this.editor.on("change", function() {
@@ -27,7 +27,7 @@
 
 <script type="text/x-red" data-template-name="nools-flow">
     <div class="form-row">
-        <label for="node-config-input-name"><i class="icon-bookmark"></i>Name</label>
+        <label for="node-config-input-name"><i class="fa fa-tag"></i> Name</label>
         <input type="text" id="node-config-input-name" />
     </div>
     <div class="form-row node-config-text-editor-row">
@@ -55,11 +55,11 @@
 
 <script type="text/x-red" data-template-name="nools-assert">
     <div class="form-row">
-        <label for="node-input-name"><i class="icon-bookmark"></i>Name</label>
+        <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
         <input type="text" id="node-input-name" />
     </div>
     <div class="form-row">
-      <label for="node-input-session"><i class="icon-bookmark"></i>Session</label>
+      <label for="node-input-session"><i class="fa fa-folder-open"></i> Session</label>
       <input id="node-input-session" />
     </div>
 </script>
@@ -74,7 +74,7 @@
       session: {value:"", type:"nools-flow"}
     },
     inputs:0,
-    outputs:1,
+    outputs:2,
     icon: "nools-fire.png",
     label: function() {
       return this.name || "fire";
@@ -84,15 +84,15 @@
 
 <script type="text/x-red" data-template-name="nools-fire">
     <div class="form-row">
-        <label for="node-input-name"><i class="icon-bookmark"></i>Name</label>
+        <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
         <input type="text" id="node-input-name" />
     </div>
     <div class="form-row">
-        <label for="node-input-topic"><i class="icon-bookmark"></i>Topic</label>
+        <label for="node-input-topic"><i class="fa fa-bookmark"></i> Topic</label>
         <input type="text" id="node-input-topic" />
     </div>
     <div class="form-row">
-      <label for="node-input-session"><i class="icon-bookmark"></i>Session</label>
+      <label for="node-input-session"><i class="fa fa-folder-open"></i> Session</label>
       <input id="node-input-session" />
     </div>
 </script>

@@ -1,6 +1,8 @@
 # Nools rule engine for Node-RED
 This package provides a rule engine for node-RED. It uses nools, a rete-based rule engine. You can create custom __flows__ with multiple rules, the flow is bind to one or more __assert__ nodes to insert new __facts__ into the flow. Each __fact__ is of type `Message` and identified by the `msg.topic` of the incoming node-RED message. If a message already exists with the same topic it will be updated. New messages will be asserted. If all conditions of a rule are evaluated the rule will be fired. The __fire__ node outputs the rule name into your node-RED flow. The message object provides different functions and properties. There is also a `Clock` class which is available.
 
+You can use the `publish({topic: "sometopic", payload: "somepayload"})` to publish messages via the __fire__ node. The __topic__ property of the node operates as a filter.
+
 ### Message
 ##### `Message.payload` or `Message.p`
 The current payload

@@ -107,17 +107,24 @@ module.exports = function(RED) {
 		RED.nodes.createNode(this,n);
 		var node = this;
 
+		node.name = n.name;
 		node.topic = n.topic;
+
 		node.session = RED.nodes.getNode(n.session).session;
 		node.messages = RED.nodes.getNode(n.session).messages;
+		RED.nodes.getNode(n.session).on("publish", function(msg) {
+			if( !node.topic || node.topic === msg.topic) {
+				node.send(msg);
+			}
+		});
 
 		node.session.on("fire", function(name, rule) {
-			node.send({
+			node.send([null, {
 				topic: node.topic,
 				payload: name,
 				facts: node.session.getFacts(),
 				name: name
-			});
+			}]);
 		});
 	}
 	RED.nodes.registerType("nools-fire", NoolsFire);
@@ -134,12 +141,16 @@ module.exports = function(RED) {
 		node.messages = {};
 		node.clock = new Clock();
 
+		var publish = function(msg) {
+			node.emit("publish", msg);
+		};
+
 		node.flow = nools.compile(n.flow, {
 			name: n.id,
 			define: {
 				Message: Message,
 				Clock: Clock,
-				node: node
+				publish: publish
 			}
 		});
 		node.session = node.flow.getSession();
